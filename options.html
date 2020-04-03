@@ -3,24 +3,147 @@
 
 <head>
   <title>Article filter settings</title>
+
+  <style>
+    html {
+      font-size: 10px;
+    }
+    body {
+      font-size: 1.4rem;
+      color: #222;
+      overflow-y: scroll;
+      margin: 0 1rem 1rem 1rem;
+    }
+
+    h2 {
+      text-transform: uppercase;
+      font-weight: 400;
+      margin: 2rem 1rem;
+      color: #222;
+      font-size: 2rem;
+    }
+
+    input[type="number"], select, textarea {
+      font: inherit;
+      padding: 0;
+      resize: none;
+      background-color: transparent;
+      border: none;
+      width: 40rem;
+      outline: none;
+      -webkit-appearance: none;
+      margin-top: 1rem;
+      overflow-y: hidden;
+      display: block;
+    }
+
+    input[type="number"] {
+      height: 1.6rem;
+    }
+
+    textarea {
+      line-height: 1.8rem;
+    }
+
+    input[type="checkbox"] {
+      margin-right: .5rem;
+    }
+
+    label {
+      border-radius: .5rem;
+      background-color: rgb(245, 243, 234);
+      padding: 1rem;
+      margin: 1.5rem 0;
+      display: block;
+      user-select: none;
+    }
+
+    hr {
+      border: none;
+      border-top: 2px solid #eee;
+    }
+
+    .option-title {
+      text-transform: uppercase;
+      font-size: 1.2rem;
+    }
+
+    .option-description {
+      margin-top: .5rem;
+      font-weight: 300;
+    }
+
+    .text-center {
+      text-align: center;
+    }
+
+    .flex {
+      display: flex;
+      align-items: center;
+    }
+
+    .monospace {
+      font-family: monospace;
+    }
+  </style>
 </head>
 
 <body>
-  Maximum length of articles to filter:
-  <input type="number" name="maxLength" />
+  <label class="flex">
+    <input type="checkbox" name="enabled" />
+    <span class="option-title">
+      Enabled
+    </span>
+  </label>
 
-  Keywords, separate with line breaks
-  <textarea name="keywords">
-  </textarea>
+  <label>
+    <div class="option-title">Keywords</div>
+    <div class="option-description">Separate with line breaks</div>
+    <textarea name="keywords"></textarea>
+  </label>
+  
+  <label class="flex">
+    <input type="checkbox" name="advancedOptions" />
+    <span class="option-title">
+      Show advanced options
+    </span>
+  </label>
 
-  Removal strategy:
-  <select name="removalStrategy">
-    <option value="hide">Hide</option>
-    <option value="makeInvisible">Make invisible</option>
-  </select>
+  <div class="advanced-options">
+    <hr />
+    <label>
+      <div class="option-title">Removal strategy</div>
+      <select name="removalStrategy">
+        <option value="hide">Do not display filtered articles</option>
+        <option value="makeInvisible">Make filtered articles invisible - still taking up space</option>
+      </select>  
+    </label>
 
-  Enabled:
-  <input type="checkbox" name="enabled" />
+    <label>
+      <div class="option-title">CSS selectors</div>
+      <div class="option-description">Separate with line breaks</div>
+      <textarea class="monospace" name="selectors"></textarea>
+    </label>
+
+    <hr />
+
+    <h2 class="text-center">Exclusion options</h2>
+    <p class="text-center">
+      Prevents full length articles from being hidden
+    </p>
+
+    <label>
+      <div class="option-title">Minimum characters</div>
+      <div class="option-description">Only remove elements with less characters than specified</div>
+      <input type="number" name="maxLength" />
+    </label>
+  
+    <label>
+      <div class="option-title">Minimum area</div>
+      <div class="option-description">Only remove elements with a smaller area (width x height pixels) than specified</div>
+      <input type="number" name="maxAreaPx" />
+    </label>
+  </div>
 
   <script src="js/options.js"></script>
 </body>

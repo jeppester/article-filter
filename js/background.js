@@ -25,6 +25,7 @@ const defaultSettings = {
   maxAreaPx: 500000,
   removalStrategy: 'hide',
   enabled: true,
+  advancedOptions: false,
 }
 
 chrome.runtime.onInstalled.addListener(function () {
