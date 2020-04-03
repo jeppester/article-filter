@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Article filter settings</title>
+</head>
+
+<body>
+  Maximum length of articles to filter:
+  <input type="number" name="maxLength" />
+
+  Keywords, separate with line breaks
+  <textarea name="keywords">
+  </textarea>
+
+  Removal strategy:
+  <select name="removalStrategy">
+    <option value="hide">Hide</option>
+    <option value="makeInvisible">Make invisible</option>
+  </select>
+
+  Enabled:
+  <input type="checkbox" name="enabled" />
+
+  <script src="js/options.js"></script>
+</body>
+
+</html>

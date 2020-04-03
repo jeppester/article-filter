@@ -6,6 +6,10 @@
   "permissions": [
     "storage"
   ],
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": false
+  },
   "icons": {
     "16": "img/icon16.png",
     "48": "img/icon48.png",
@@ -17,10 +21,20 @@
       "38": "img/icon48.png"
     }
   },
+  "background": {
+    "scripts": [
+      "js/background.js"
+    ],
+    "persistent": false
+  },
   "content_scripts": [
     {
-      "matches": ["*://*/*"],
-      "js": ["js/index.js"]
+      "matches": [
+        "*://*/*"
+      ],
+      "js": [
+        "js/index.js"
+      ]
     }
   ],
   "web_accessible_resources": [
