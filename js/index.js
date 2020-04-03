@@ -29,7 +29,7 @@ const articleFilter = {
   blockKeywords(element) {
     var innerText = element.innerText.toLowerCase()
     for (let keyword of this.settings.keywords) {
-      if (innerText.length > this.settings.maxLength || this.getAreaIsTooLarge(element)) {
+      if (innerText.length > this.settings.maxLength && this.getAreaIsTooLarge(element)) {
         continue
       }
       if (innerText.indexOf(keyword) !== -1) {
