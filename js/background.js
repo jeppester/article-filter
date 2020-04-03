@@ -15,6 +15,7 @@ const defaultSettings = {
     'header',
   ].join('\n'),
   maxLength: 300,
+  maxAreaPx: 1000000,
   removalStrategy: 'hide',
   enabled: true,
 }

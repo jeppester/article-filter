@@ -4,13 +4,14 @@ const settingsKeys = [
   'maxLength',
   'removalStrategy',
   'enabled',
+  'maxAreaPx',
 ]
 
 const articleFilter = {
   settings: null,
 
   init() {
-    ['blockKeywords', 'checkSelector', 'update'].forEach(fn => this[fn] = this[fn].bind(this))
+    ['blockKeywords', 'checkSelector', 'update', 'getAreaIsTooLarge'].forEach(fn => this[fn] = this[fn].bind(this))
 
     chrome.storage.sync.get(settingsKeys, settings => {
       if (!settings.enabled) return
@@ -28,7 +29,7 @@ const articleFilter = {
   blockKeywords(element) {
     var innerText = element.innerText.toLowerCase()
     for (let keyword of this.settings.keywords) {
-      if (innerText.length > 300) {
+      if (innerText.length > this.settings.maxLength || this.getAreaIsTooLarge(element)) {
         continue
       }
       if (innerText.indexOf(keyword) !== -1) {
@@ -44,6 +45,11 @@ const articleFilter = {
         break
       }
     }
+  },
+
+  getAreaIsTooLarge(element) {
+    const area = element.offsetWidth * element.offsetHeight
+    return this.settings.maxAreaPx < area
   },
 
   checkSelector(selector) {
