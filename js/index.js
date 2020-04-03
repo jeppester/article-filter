@@ -17,8 +17,8 @@ const articleFilter = {
       if (!settings.enabled) return
 
       this.settings = settings
-      this.settings.keywords = settings.keywords.split('\n')
-      this.settings.selectors = settings.selectors.split('\n')
+      this.settings.keywords = settings.keywords.trim().split(/\s*\n\s*/)
+      this.settings.selectors = settings.selectors.trim().split(/\s*\n\s*/)
 
       this.observer = new MutationObserver(this.update)
       this.observer.observe(document.body, { childList: true })
