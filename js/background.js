@@ -26,6 +26,10 @@ const defaultSettings = {
   removalStrategy: 'hide',
   enabled: true,
   advancedOptions: false,
+  descriptionKeywords: [
+    'nyhed',
+    'medie',
+  ].join('\n'),
 }
 
 chrome.runtime.onInstalled.addListener(function () {

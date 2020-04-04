@@ -5,6 +5,7 @@ const settingsKeys = [
   'removalStrategy',
   'enabled',
   'maxAreaPx',
+  'descriptionKeywords'
 ]
 
 const articleFilter = {
@@ -19,11 +20,33 @@ const articleFilter = {
       this.settings = settings
       this.settings.keywords = settings.keywords.trim().split(/\s*\n\s*/)
       this.settings.selectors = settings.selectors.trim().split(/\s*\n\s*/)
+      this.settings.descriptionKeywords = settings.descriptionKeywords.trim().split(/\s*\n\s*/)
+
+      if (!this.siteMatchesDescriptionKeywords()) return
 
       this.observer = new MutationObserver(this.update)
       this.observer.observe(document.body, { childList: true })
       this.update()
     })
+  },
+
+  siteMatchesDescriptionKeywords() {
+    const selector = [
+      'meta[name="description"]',
+      'meta[property="og:description"]'
+    ].join(',')
+
+    const elements = document.head.querySelectorAll(selector)
+
+    for (let element of elements) {
+      const content = element.getAttribute('content').toLowerCase();
+
+      for (let keyword of this.settings.descriptionKeywords) {
+        if (content.indexOf(keyword) !== -1) return true
+      }
+    }
+
+    return false
   },
 
   blockKeywords(element) {

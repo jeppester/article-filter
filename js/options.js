@@ -6,6 +6,7 @@ const settingsKeys = [
   'advancedOptions',
   'selectors',
   'maxAreaPx',
+  'descriptionKeywords',
 ]
 
 const articleFilterSettings = {
