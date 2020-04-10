@@ -17,9 +17,11 @@
   },
   "browser_action": {
     "default_icon": {
-      "19": "img/icon48.png",
-      "38": "img/icon48.png"
-    }
+      "16": "img/icon16.png",
+      "48": "img/icon48.png",
+      "128": "img/icon128.png"
+    },
+    "default_popup": "options.html"
   },
   "background": {
     "scripts": [
@@ -29,12 +31,14 @@
   },
   "content_scripts": [
     {
+      "all_frames": true,
       "matches": [
         "*://*/*"
       ],
       "js": [
         "js/index.js"
-      ]
+      ],
+      "run_at": "document_end"
     }
   ],
   "web_accessible_resources": [
