@@ -25,7 +25,7 @@ const articleFilterSettings = {
   updateFieldValues() {
     for (let [setting, value] of Object.entries(this.settings)) {
       const field = document.querySelector(`[name="${setting}"]`)
-  
+
       if (field.type === 'checkbox') {
         field.checked = value
       }
@@ -40,7 +40,7 @@ const articleFilterSettings = {
       element.addEventListener('input', ({ target }) => {
         const { name } = target
         let value
-  
+
         if (target.type === 'checkbox') {
           value = target.checked
         }
@@ -49,7 +49,7 @@ const articleFilterSettings = {
         }
 
         this.settings[name] = value
-  
+
         chrome.storage.sync.set(this.settings, () => this.updateAdvancedOptionsVisible())
       })
     }
@@ -65,7 +65,7 @@ const articleFilterSettings = {
     textareas.forEach(textarea => {
       this.autoSize(textarea)
       textarea.addEventListener('keydown', ({ target }) => {
-          setTimeout(() => this.autoSize(target), 0)
+        setTimeout(() => this.autoSize(target), 0)
       })
     })
   },

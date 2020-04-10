@@ -8,6 +8,7 @@
     html {
       font-size: 10px;
     }
+
     body {
       font-size: 1.4rem;
       color: #222;
@@ -23,7 +24,9 @@
       font-size: 2rem;
     }
 
-    input[type="number"], select, textarea {
+    input[type="number"],
+    select,
+    textarea {
       font: inherit;
       padding: 0;
       resize: none;
@@ -101,7 +104,7 @@
     <div class="option-description">Separate with line breaks</div>
     <textarea name="keywords"></textarea>
   </label>
-  
+
   <label class="flex">
     <input type="checkbox" name="advancedOptions" />
     <span class="option-title">
@@ -137,10 +140,11 @@
       <div class="option-description">Only remove elements with less characters than specified</div>
       <input type="number" name="maxLength" />
     </label>
-  
+
     <label>
       <div class="option-title">Minimum area</div>
-      <div class="option-description">Only remove elements with a smaller area (width x height pixels) than specified</div>
+      <div class="option-description">Only remove elements with a smaller area (width x height pixels) than specified
+      </div>
       <input type="number" name="maxAreaPx" />
     </label>
   </div>
