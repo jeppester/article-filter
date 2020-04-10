@@ -29,6 +29,11 @@ const defaultSettings = {
   advancedOptions: false,
 }
 
-chrome.runtime.onInstalled.addListener(function () {
+chrome.runtime.onInstalled.addListener(() => {
   chrome.storage.sync.set(defaultSettings);
+});
+
+chrome.runtime.onMessage.addListener((message, sender) => {
+  chrome.browserAction.setBadgeBackgroundColor({ color: '#140' })
+  chrome.browserAction.setBadgeText({ text: message.hiddenElementsLength.toString(), "tabId": sender.tab.id })
 });

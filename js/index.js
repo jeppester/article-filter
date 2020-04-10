@@ -23,6 +23,7 @@ const articleFilter = {
       this.observer = new MutationObserver(this.handleMutation)
       this.observer.observe(document.body, { subtree: true, childList: true })
       this.updateNode(document.body)
+      this.updateCounter()
     })
   },
 
@@ -117,6 +118,11 @@ const articleFilter = {
 
   updateNode(node) {
     this.checkContainer(node)
+    this.updateCounter()
+  },
+
+  updateCounter() {
+    chrome.runtime.sendMessage({ hiddenElementsLength: this.hiddenElements.length })
   },
 
   handleMutation(mutationRecords) {
