@@ -11,6 +11,7 @@ const articleFilter = {
   settings: null,
   hiddenElements: [],
   checkedNodes: 0,
+  letterMatcher: /[^\u0000-\u007F]|\w/,
 
   init() {
     chrome.storage.sync.get(settingsKeys, settings => {
@@ -33,23 +34,41 @@ const articleFilter = {
     var innerText = element.innerText.toLowerCase()
     if (innerText.length < this.settings.maxLength || !this.getAreaIsTooLarge(element)) {
       for (let keyword of this.settings.keywords) {
-        if (innerText.indexOf(keyword) !== -1) {
-          this.updateElementVisible(element, false)
-          return
-        }
+        if (this.getKeywordMatchesText(keyword, innerText)) this.hideElement(element)
       }
     }
   },
 
-  updateElementVisible(element, shouldBeVisible) {
-    const isCurrentlyVisible = !this.hiddenElements.includes(element)
+  getKeywordMatchesText(keyword, text) {
+    let allowLettersBefore = false
+    let allowLettersAfter = false
 
-    if (isCurrentlyVisible) {
-      if (!shouldBeVisible) this.hideElement(element)
+    if (keyword[0] === '*') {
+      keyword = keyword.substr(1)
+      allowLettersBefore = true
     }
-    else {
-      if (shouldBeVisible) this.showElement(element)
+
+    if (keyword[keyword.length - 1] === '*') {
+      keyword = keyword.slice(0, -1)
+      allowLettersAfter = true
     }
+
+    const index = text.indexOf(keyword)
+    if (index !== -1) {
+      if (!allowLettersBefore) {
+        const characterBefore = text[index - 1]
+        if (characterBefore && this.letterMatcher.test(characterBefore)) return false
+      }
+
+      if (!allowLettersAfter) {
+        const characterAfter = text[index + keyword.length]
+        if (characterAfter && this.letterMatcher.test(characterAfter)) return false
+      }
+
+      return true
+    }
+
+    return false
   },
 
   hideElement(element) {

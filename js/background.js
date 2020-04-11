@@ -6,8 +6,8 @@ const defaultSettings = {
     'død',
     'angreb',
     'soldat',
-    'corona',
-    'covid',
+    'corona*',
+    'covid*',
     'udgangsforbud',
   ].join('\n'),
   selectors: [
