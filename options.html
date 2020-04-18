@@ -19,9 +19,13 @@
     h2 {
       text-transform: uppercase;
       font-weight: 400;
-      margin: 2rem 1rem;
+      margin: 2rem 1rem .5rem;
       color: #222;
-      font-size: 2rem;
+      font-size: 1.2rem;
+    }
+
+    p {
+      margin: .5rem 1rem;
     }
 
     input[type="number"],
@@ -140,21 +144,19 @@
       <textarea class="monospace" name="exclusionSelectors"></textarea>
     </label>
 
-    <h2 class="text-center">Exclusion options</h2>
+    <h2 class="text-center">Full length article detection</h2>
     <p class="text-center">
-      Prevents full length articles from being hidden
+      Keep items that matches <b>both</b> requirements below
     </p>
 
     <label>
-      <div class="option-title">Minimum characters</div>
-      <div class="option-description">Only remove elements with less characters than specified</div>
+      <div class="option-title">More characters than</div>
       <input type="number" name="maxLength" />
     </label>
 
     <label>
-      <div class="option-title">Minimum area</div>
-      <div class="option-description">Only remove elements with a smaller area (width x height pixels) than specified
-      </div>
+      <div class="option-title">Larger area than</div>
+      <div class="option-description">Width x height pixels</div>
       <input type="number" name="maxAreaPx" />
     </label>
   </div>

@@ -39,10 +39,16 @@ const newsFilter = {
     this.checkedNodes++
 
     var innerText = element.innerText.toLowerCase()
-    if (innerText.length < this.settings.maxLength || !this.getAreaIsTooLarge(element)) {
-      for (let keyword of this.settings.keywords) {
-        if (this.getKeywordMatchesText(keyword, innerText)) this.hideElement(element)
-      }
+
+    const elementIsFullLengthArticle = (
+      innerText.length > this.settings.maxLength &&
+      this.getAreaIsTooLarge(element)
+    )
+
+    if (elementIsFullLengthArticle) return
+
+    for (let keyword of this.settings.keywords) {
+      if (this.getKeywordMatchesText(keyword, innerText)) this.hideElement(element)
     }
   },
 
@@ -118,7 +124,7 @@ const newsFilter = {
 
   getAreaIsTooLarge(element) {
     const area = element.offsetWidth * element.offsetHeight
-    return this.settings.maxAreaPx < area
+    return area > this.settings.maxAreaPx
   },
 
   eleminateNodesInNodes(nodes) {
