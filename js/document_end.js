@@ -1,6 +1,7 @@
 const settingsKeys = [
   'keywords',
   'selectors',
+  'exclusionSelectors',
   'maxLength',
   'removalStrategy',
   'maxAreaPx',
@@ -19,6 +20,7 @@ const newsFilter = {
       this.settings = settings
       this.settings.keywords = settings.keywords.trim().split(/\s*\n\s*/)
       this.settings.selectors = settings.selectors.trim().split(/\s*\n\s*/)
+      this.settings.exclusionSelectors = settings.exclusionSelectors.trim().split(/\s*\n\s*/)
       this.settings.allowedOrigins = settings.allowedOrigins.trim().split(/\s*\n\s*/)
 
       if (this.settings.allowedOrigins.includes(this.tabOrigin)) {
@@ -120,7 +122,7 @@ const newsFilter = {
   },
 
   eleminateNodesInNodes(nodes) {
-    const remainingToCheck = Array.from(nodes)
+    const remainingToCheck = nodes.slice()
     const accepted = []
 
     let node
@@ -135,10 +137,14 @@ const newsFilter = {
   },
 
   checkContainer(node) {
-    const matchingNodes = node.querySelectorAll(this.settings.selectors.join(','))
-    const sanitizedMatchingNodes = this.eleminateNodesInNodes(matchingNodes)
+    const joinedSelectors = this.settings.selectors.join(',')
+    const joinedExclusionSelectors = this.settings.exclusionSelectors.join(',')
 
-    sanitizedMatchingNodes.forEach(this.blockKeywords)
+    let matchingNodes = Array.from(node.querySelectorAll(joinedSelectors))
+    matchingNodes = matchingNodes.filter(node => !node.matches(joinedExclusionSelectors))
+    matchingNodes = this.eleminateNodesInNodes(matchingNodes)
+
+    matchingNodes.forEach(this.blockKeywords)
   },
 
   updateNode(node) {

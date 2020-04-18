@@ -4,6 +4,7 @@ const settingsKeys = [
   'removalStrategy',
   'advancedOptions',
   'selectors',
+  'exclusionSelectors',
   'maxAreaPx',
   'allowedOrigins',
 ]
