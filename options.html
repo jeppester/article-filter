@@ -92,10 +92,10 @@
 </head>
 
 <body>
-  <label class="flex">
-    <input type="checkbox" name="enabled" />
+  <label class="flex origin-options">
+    <input type="checkbox" name="disabledForOrigin" />
     <span class="option-title">
-      Enabled
+      Disable for site - <b class="origin-text"></b>
     </span>
   </label>
 
@@ -126,6 +126,12 @@
       <div class="option-title">CSS selectors</div>
       <div class="option-description">Separate with line breaks</div>
       <textarea class="monospace" name="selectors"></textarea>
+    </label>
+
+    <label>
+      <div class="option-title">Allowed sites</div>
+      <div class="option-description">Separate with line breaks</div>
+      <textarea class="monospace" name="allowedOrigins"></textarea>
     </label>
 
     <hr />

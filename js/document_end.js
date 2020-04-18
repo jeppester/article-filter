@@ -3,8 +3,8 @@ const settingsKeys = [
   'selectors',
   'maxLength',
   'removalStrategy',
-  'enabled',
   'maxAreaPx',
+  'allowedOrigins',
 ]
 
 const articleFilter = {
@@ -12,14 +12,16 @@ const articleFilter = {
   hiddenElements: [],
   checkedNodes: 0,
   letterMatcher: /[^\u0000-\u007F]|\w/,
+  tabOrigin: null,
 
   init() {
     chrome.storage.sync.get(settingsKeys, settings => {
       this.settings = settings
       this.settings.keywords = settings.keywords.trim().split(/\s*\n\s*/)
       this.settings.selectors = settings.selectors.trim().split(/\s*\n\s*/)
+      this.settings.allowedOrigins = settings.allowedOrigins.trim().split(/\s*\n\s*/)
 
-      if (!this.settings.enabled) {
+      if (this.settings.allowedOrigins.includes(this.tabOrigin)) {
         chrome.runtime.sendMessage({ command: 'disableCounter' })
         return
       }
@@ -162,6 +164,15 @@ Object.getOwnPropertyNames(articleFilter).forEach(name => {
   if (typeof articleFilter[name] === 'function') articleFilter[name] = articleFilter[name].bind(articleFilter)
 })
 
-articleFilter.init()
+chrome.runtime.onMessage.addListener(({ command, options }) => {
+  switch (command) {
+    case 'setTabOrigin': {
+      articleFilter.tabOrigin = options.tabOrigin
+      articleFilter.init()
+    }
+  }
+})
+
+chrome.runtime.sendMessage({ command: 'getTabOrigin' })
 
 chrome.storage.onChanged.addListener(articleFilter.handleSettingsChange)

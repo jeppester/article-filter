@@ -25,32 +25,47 @@ const defaultSettings = {
   maxLength: 300,
   maxAreaPx: 500000,
   removalStrategy: 'hide',
-  enabled: true,
   advancedOptions: false,
+  allowedOrigins: [
+    'http://localhost',
+  ].join('\n')
 }
+
+const getIconDictionary = name => ({
+  "16": `img/${name}16.png`,
+  "48": `img/${name}48.png`,
+  "128": `img/${name}128.png`
+})
 
 chrome.runtime.onInstalled.addListener(() => {
   chrome.storage.sync.set(defaultSettings);
 });
-
-chrome.browserAction.setBadgeBackgroundColor({ color: '#140' })
 
 const totals = {}
 
 const updateBatchCount = tab => {
   const totalForTab = totals[tab.id] || {}
   const sumOfAllFrames = Object.values(totalForTab).reduce((total, value) => total + value, 0)
+
+  chrome.browserAction.setIcon({ path: getIconDictionary('icon'), tabId: tab.id })
+  chrome.browserAction.setBadgeBackgroundColor({ color: '#140' })
   chrome.browserAction.setBadgeText({ text: sumOfAllFrames.toString(), "tabId": tab.id })
 }
 
 const commands = {
+  getTabOrigin(sender) {
+    const tabOrigin = new URL(sender.tab.url).origin
+    chrome.tabs.sendMessage(sender.tab.id, { command: 'setTabOrigin', options: { tabOrigin } })
+  },
+
   disableCounter(sender) {
+    chrome.browserAction.setIcon({ path: getIconDictionary('icon-disabled'), tabId: sender.tab.id })
     chrome.browserAction.setBadgeText({ text: '', "tabId": sender.tab.id })
   },
 
   resetCounter(sender) {
     totals[sender.tab.id] = {}
-    chrome.browserAction.setBadgeText({ text: '', "tabId": sender.tab.id })
+    updateBatchCount(sender.tab)
   },
 
   updateCounter(sender, options) {

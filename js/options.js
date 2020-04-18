@@ -2,27 +2,34 @@ const settingsKeys = [
   'keywords',
   'maxLength',
   'removalStrategy',
-  'enabled',
   'advancedOptions',
   'selectors',
   'maxAreaPx',
+  'allowedOrigins',
 ]
 
 const articleFilterSettings = {
   settings: null,
+  tabOrigin: null,
 
   init() {
     chrome.storage.sync.get(settingsKeys, settings => {
       this.settings = settings
 
-      this.updateFieldValues()
+      this.updateView()
       this.addFieldListeners()
       this.intializeAutoSize()
-      this.updateAdvancedOptionsVisible()
+
+      chrome.storage.onChanged.addListener((changes) => {
+        for (let [key, { newValue }] of Object.entries(changes)) {
+          this.settings[key] = newValue
+        }
+        this.updateView()
+      })
     });
   },
 
-  updateFieldValues() {
+  updateView() {
     for (let [setting, value] of Object.entries(this.settings)) {
       const field = document.querySelector(`[name="${setting}"]`)
 
@@ -33,6 +40,20 @@ const articleFilterSettings = {
         field.value = value
       }
     }
+
+    const disabledForSiteField = document.querySelector('[name="disabledForOrigin"]')
+    const allowedOriginsArray = this.settings.allowedOrigins.trim().split(/\s*\n\s*/)
+    disabledForSiteField.checked = allowedOriginsArray.includes(this.tabOrigin)
+
+    const originOptions = document.querySelector('.origin-options')
+    const showOriginOptions = !/^chrome/.test(this.tabOrigin)
+    originOptions.style.display = showOriginOptions ? '' : 'none'
+
+    const advancedOptions = document.querySelector('.advanced-options')
+    advancedOptions.style.display = this.settings.advancedOptions ? '' : 'none'
+
+    const textareas = document.querySelectorAll('textarea');
+    textareas.forEach(this.autoSize, this)
   },
 
   addFieldListeners() {
@@ -40,6 +61,11 @@ const articleFilterSettings = {
       element.addEventListener('input', ({ target }) => {
         const { name } = target
         let value
+
+        if (name === 'disabledForOrigin') {
+          this.toggleOrigin()
+          return
+        }
 
         if (target.type === 'checkbox') {
           value = target.checked
@@ -50,20 +76,30 @@ const articleFilterSettings = {
 
         this.settings[name] = value
 
-        chrome.storage.sync.set(this.settings, () => this.updateAdvancedOptionsVisible())
+        chrome.storage.sync.set(this.settings)
       })
     }
   },
 
-  updateAdvancedOptionsVisible() {
-    const advancedOptions = document.querySelector('.advanced-options')
-    advancedOptions.style.display = this.settings.advancedOptions ? 'block' : 'none'
+  toggleOrigin() {
+    const allowedOriginsArray = this.settings.allowedOrigins.trim().split(/\s*\n\s*/)
+
+    if (allowedOriginsArray.includes(this.tabOrigin)) {
+      allowedOriginsArray.splice(allowedOriginsArray.indexOf(this.tabOrigin), 1)
+    }
+    else {
+      allowedOriginsArray.push(this.tabOrigin)
+    }
+
+    chrome.storage.sync.set({
+      ...this.settings,
+      allowedOrigins: allowedOriginsArray.join('\n')
+    })
   },
 
   intializeAutoSize() {
     const textareas = document.querySelectorAll('textarea');
     textareas.forEach(textarea => {
-      this.autoSize(textarea)
       textarea.addEventListener('keydown', ({ target }) => {
         setTimeout(() => this.autoSize(target), 0)
       })
@@ -76,4 +112,10 @@ const articleFilterSettings = {
   }
 }
 
-articleFilterSettings.init()
+chrome.tabs.query({ active: true, lastFocusedWindow: true }, tabs => {
+  const tabUrl = new URL(tabs[0].url)
+
+  articleFilterSettings.tabOrigin = tabUrl.origin
+  document.querySelector('.origin-text').innerHTML = tabUrl.host
+  articleFilterSettings.init()
+});

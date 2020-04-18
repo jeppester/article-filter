@@ -4,7 +4,8 @@
   "description": "A simple filtering extension that blocks articles by keywords or regular expressions",
   "version": "1.0",
   "permissions": [
-    "storage"
+    "storage",
+    "tabs"
   ],
   "options_ui": {
     "page": "options.html",
