@@ -19,7 +19,10 @@ const articleFilter = {
       this.settings.keywords = settings.keywords.trim().split(/\s*\n\s*/)
       this.settings.selectors = settings.selectors.trim().split(/\s*\n\s*/)
 
-      if (!this.settings.enabled) return
+      if (!this.settings.enabled) {
+        chrome.runtime.sendMessage({ command: 'disableCounter' })
+        return
+      }
 
       this.observer = new MutationObserver(this.handleMutation)
       this.observer.observe(document.body, { subtree: true, childList: true })
@@ -142,7 +145,7 @@ const articleFilter = {
   },
 
   updateCounter() {
-    chrome.runtime.sendMessage({ hiddenElementsLength: this.hiddenElements.length })
+    chrome.runtime.sendMessage({ command: 'updateCounter', options: { hiddenElementsLength: this.hiddenElements.length, href: location.href } })
   },
 
   handleMutation(mutationRecords) {
@@ -158,6 +161,7 @@ const articleFilter = {
 Object.getOwnPropertyNames(articleFilter).forEach(name => {
   if (typeof articleFilter[name] === 'function') articleFilter[name] = articleFilter[name].bind(articleFilter)
 })
+
 articleFilter.init()
 
 chrome.storage.onChanged.addListener(articleFilter.handleSettingsChange)
