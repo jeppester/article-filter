@@ -36,7 +36,7 @@
         "*://*/*"
       ],
       "js": [
-        "js/index.js"
+        "js/document_end.js"
       ],
       "run_at": "document_end"
     }
