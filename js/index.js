@@ -104,6 +104,7 @@ const articleFilter = {
       }
     }
 
+    this.observer?.disconnect()
     this.checkedNodes = 0
     this.hiddenElements = []
   },
