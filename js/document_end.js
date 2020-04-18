@@ -7,7 +7,7 @@ const settingsKeys = [
   'allowedOrigins',
 ]
 
-const articleFilter = {
+const newsFilter = {
   settings: null,
   hiddenElements: [],
   checkedNodes: 0,
@@ -160,19 +160,19 @@ const articleFilter = {
   }
 }
 
-Object.getOwnPropertyNames(articleFilter).forEach(name => {
-  if (typeof articleFilter[name] === 'function') articleFilter[name] = articleFilter[name].bind(articleFilter)
+Object.getOwnPropertyNames(newsFilter).forEach(name => {
+  if (typeof newsFilter[name] === 'function') newsFilter[name] = newsFilter[name].bind(newsFilter)
 })
 
 chrome.runtime.onMessage.addListener(({ command, options }) => {
   switch (command) {
     case 'setTabOrigin': {
-      articleFilter.tabOrigin = options.tabOrigin
-      articleFilter.init()
+      newsFilter.tabOrigin = options.tabOrigin
+      newsFilter.init()
     }
   }
 })
 
 chrome.runtime.sendMessage({ command: 'getTabOrigin' })
 
-chrome.storage.onChanged.addListener(articleFilter.handleSettingsChange)
+chrome.storage.onChanged.addListener(newsFilter.handleSettingsChange)

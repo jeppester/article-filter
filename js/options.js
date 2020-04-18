@@ -8,7 +8,7 @@ const settingsKeys = [
   'allowedOrigins',
 ]
 
-const articleFilterSettings = {
+const newsFilterSettings = {
   settings: null,
   tabOrigin: null,
 
@@ -115,7 +115,7 @@ const articleFilterSettings = {
 chrome.tabs.query({ active: true, lastFocusedWindow: true }, tabs => {
   const tabUrl = new URL(tabs[0].url)
 
-  articleFilterSettings.tabOrigin = tabUrl.origin
+  newsFilterSettings.tabOrigin = tabUrl.origin
   document.querySelector('.origin-text').innerHTML = tabUrl.host
-  articleFilterSettings.init()
+  newsFilterSettings.init()
 });

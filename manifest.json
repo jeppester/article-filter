@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
-  "name": "Article filter",
-  "description": "A simple filtering extension that blocks articles by keywords or regular expressions",
+  "name": "News Filter",
+  "description": "Block news items by keywords",
   "version": "1.0",
   "permissions": [
     "storage",
