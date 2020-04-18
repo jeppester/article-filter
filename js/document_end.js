@@ -29,7 +29,7 @@ const newsFilter = {
       this.observer = new MutationObserver(this.handleMutation)
       this.observer.observe(document.body, { subtree: true, childList: true })
       this.updateNode(document.body)
-      this.updateCounter()
+      this.updateCounter(this.hiddenElements.length)
     })
   },
 
@@ -142,12 +142,15 @@ const newsFilter = {
   },
 
   updateNode(node) {
+    const previousCount = this.hiddenElements.length
     this.checkContainer(node)
-    this.updateCounter()
+
+    const updatedCount = this.hiddenElements.length
+    if (previousCount !== updatedCount) this.updateCounter(updatedCount)
   },
 
-  updateCounter() {
-    chrome.runtime.sendMessage({ command: 'updateCounter', options: { hiddenElementsLength: this.hiddenElements.length, href: location.href } })
+  updateCounter(hiddenElementsLength) {
+    chrome.runtime.sendMessage({ command: 'updateCounter', options: { hiddenElementsLength, href: location.href } })
   },
 
   handleMutation(mutationRecords) {
