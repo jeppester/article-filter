@@ -154,11 +154,7 @@ const newsFilter = {
   },
 
   updateNode(node) {
-    const previousCount = this.hiddenElements.length
     this.checkContainer(node)
-
-    const updatedCount = this.hiddenElements.length
-    if (previousCount !== updatedCount) this.updateCounter(updatedCount)
   },
 
   updateCounter(hiddenElementsLength) {
@@ -166,7 +162,12 @@ const newsFilter = {
   },
 
   handleMutation(mutationRecords) {
+    const previousCount = this.hiddenElements.length
+
     mutationRecords.forEach(({ target }) => this.updateNode(target))
+
+    const updatedCount = this.hiddenElements.length
+    if (previousCount !== updatedCount) this.updateCounter(updatedCount)
   },
 
   handleSettingsChange() {
