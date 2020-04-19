@@ -20,14 +20,13 @@ const newsFilterSettings = {
       this.updateView()
       this.addFieldListeners()
       this.intializeAutoSize()
-
-      chrome.storage.onChanged.addListener((changes) => {
-        for (let [key, { newValue }] of Object.entries(changes)) {
-          this.settings[key] = newValue
-        }
-        this.updateView()
-      })
     });
+  },
+
+  updateSettings(settings) {
+    Object.assign(this.settings, settings)
+    this.updateView()
+    chrome.storage.sync.set(this.settings)
   },
 
   updateView() {
@@ -75,9 +74,7 @@ const newsFilterSettings = {
           value = target.value
         }
 
-        this.settings[name] = value
-
-        chrome.storage.sync.set(this.settings)
+        this.updateSettings({ [name]: value })
       })
     }
   },
@@ -92,10 +89,7 @@ const newsFilterSettings = {
       allowedOriginsArray.push(this.tabOrigin)
     }
 
-    chrome.storage.sync.set({
-      ...this.settings,
-      allowedOrigins: allowedOriginsArray.join('\n')
-    })
+    this.updateSettings({ allowedOrigins: allowedOriginsArray.join('\n') })
   },
 
   intializeAutoSize() {
