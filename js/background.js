@@ -21,6 +21,8 @@ const defaultSettings = {
     '[class*=post]',
     '[class*=item]',
     '[class*=spot]',
+    '[class*=tile]',
+    '[class*=card]',
   ].join('\n'),
   exclusionSelectors: [
     'ul',
@@ -29,6 +31,8 @@ const defaultSettings = {
     '[class*=posts]',
     '[class*=items]',
     '[class*=spots]',
+    '[class*=tiles]',
+    '[class*=cards]',
   ].join('\n'),
   maxLength: 300,
   maxAreaPx: 500000,
