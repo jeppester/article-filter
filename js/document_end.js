@@ -48,7 +48,10 @@ const newsFilter = {
     if (elementIsFullLengthArticle) return
 
     for (let keyword of this.settings.keywords) {
-      if (this.getKeywordMatchesText(keyword, innerText)) this.hideElement(element)
+      if (this.getKeywordMatchesText(keyword, innerText)) {
+        this.hideElement(element)
+        return
+      }
     }
   },
 
